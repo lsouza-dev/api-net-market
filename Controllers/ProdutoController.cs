@@ -46,7 +46,16 @@ namespace Market.Controllers
         [HttpPut]
         [Route("{id}")]
         public ActionResult Editar(int id, ProdutoEdicaoDTO edicaoDTO){
-            return Ok();
+            var produto = _service.Editar(id,edicaoDTO);
+            return Ok(new ProdutoExibicaoDTO(produto));
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public ActionResult Excluir(int id){
+            var excluido = _service.Excluir(id);
+            if(!excluido) return NotFound();
+            return NoContent();
         }
 
         

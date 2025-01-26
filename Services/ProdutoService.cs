@@ -25,7 +25,7 @@ namespace Market.Services
 
         public List<ProdutoExibicaoDTO> Listar()
         {
-            var produtos = _context.Produtos.ToList();
+            var produtos = _context.Produtos.Where(p => p.Ativo == true).ToList();
             var dtos = produtos.Select(p => new ProdutoExibicaoDTO(p)).ToList();
             return dtos;
         }
@@ -33,6 +33,28 @@ namespace Market.Services
         public Produto BuscarPorId(int id)
         {
             return _context.Produtos.Where(p => p.Id == id).FirstOrDefault();
+        }
+
+        public Produto Editar(int id,ProdutoEdicaoDTO edicaoDTO)
+        {
+            var produtoDb = BuscarPorId(id);
+            produtoDb.Editar(edicaoDTO);
+            _context.Produtos.Update(produtoDb);
+            _context.SaveChanges();
+
+            return produtoDb;
+        }
+
+        public bool Excluir(int id)
+        {
+            var produtoDb = BuscarPorId(id);
+            if(produtoDb == null) return false;
+
+            produtoDb.Desativar();
+            _context.Produtos.Update(produtoDb);
+            _context.SaveChanges();
+
+            return true;
         }
     }
 }

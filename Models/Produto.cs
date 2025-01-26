@@ -28,6 +28,7 @@ namespace Market.Models
         public decimal Preco { get; set; }
         [Required]
         public int QuantidadeEstoque { get; set; }
+        public bool Ativo {get; set;} = true;
 
         public ICollection<CompraProduto> ComprasProdutos {get; set;}
 
@@ -38,9 +39,25 @@ namespace Market.Models
             this.Codigo = dto.Codigo;
             this.Preco = dto.Preco;
             this.QuantidadeEstoque = dto.QuantidadeEstoque;
+            this.Ativo = true;
 
             return this;
         }
 
+        public Produto Editar(ProdutoEdicaoDTO dto){
+            if(dto.Nome != null) this.Nome = dto.Nome;        
+            if(dto.Descricao != null) this.Descricao = dto.Descricao;        
+            if(dto.Codigo != null) this.Codigo = dto.Codigo;        
+            if(dto.Preco != default(decimal)) this.Preco = dto.Preco;        
+            if(dto.QuantidadeEstoque != default(int)) this.QuantidadeEstoque = dto.QuantidadeEstoque;        
+            if(dto.Ativo != null) this.Ativo = (bool)dto.Ativo;        
+
+            return this;
+        }
+
+
+        public void Desativar(){
+            this.Ativo = false;
+        }
     }
 }
