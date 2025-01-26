@@ -1,4 +1,5 @@
 using Market.Context;
+using Market.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<MarketContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
 });
+
+builder.Services.AddScoped<ProdutoService>();
 
 var app = builder.Build();
 

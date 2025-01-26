@@ -138,3 +138,4 @@ C:\Personal-Projects\Market\obj\Debug\net8.0\refint\Market.dll
 C:\Personal-Projects\Market\obj\Debug\net8.0\Market.pdb
 C:\Personal-Projects\Market\obj\Debug\net8.0\Market.genruntimeconfig.cache
 C:\Personal-Projects\Market\obj\Debug\net8.0\ref\Market.dll
+C:\Personal-Projects\Market\obj\Debug\net8.0\Market.sourcelink.json
