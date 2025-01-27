@@ -16,6 +16,10 @@ builder.Services.AddDbContext<MarketContext>(options => {
 });
 
 builder.Services.AddScoped<ProdutoService>();
+builder.Services.AddScoped<ClienteService>();
+builder.Services.AddScoped<CompraService>();
+builder.Services.AddScoped<CompraProdutoService>();
+
 
 var app = builder.Build();
 

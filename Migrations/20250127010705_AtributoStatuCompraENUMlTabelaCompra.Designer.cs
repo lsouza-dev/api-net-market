@@ -4,6 +4,7 @@ using Market.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Market.Migrations
 {
     [DbContext(typeof(MarketContext))]
-    partial class MarketContextModelSnapshot : ModelSnapshot
+    [Migration("20250127010705_AtributoStatuCompraENUMlTabelaCompra")]
+    partial class AtributoStatuCompraENUMlTabelaCompra
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,9 +51,6 @@ namespace Market.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 
-                    b.Property<decimal>("Saldo")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Clientes");
@@ -64,20 +64,17 @@ namespace Market.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClienteId")
+                    b.Property<int?>("ClienteId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DataFim")
+                    b.Property<DateTime>("DataCompra")
                         .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataInicio")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("ValorTotal")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -152,9 +149,7 @@ namespace Market.Migrations
                 {
                     b.HasOne("Market.Models.Cliente", "Cliente")
                         .WithMany("Compras")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClienteId");
 
                     b.Navigation("Cliente");
                 });
