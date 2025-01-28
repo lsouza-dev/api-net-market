@@ -59,5 +59,19 @@ namespace Market.Models
         public void Desativar(){
             this.Ativo = false;
         }
+
+        public (bool,string) Vender(int quantidade)
+        {
+            if(this.QuantidadeEstoque < quantidade) return (false,$"O produto não tem quantidade o suficiente para essa compra. Quantidade restante: {this.QuantidadeEstoque}.");
+            this.QuantidadeEstoque -= quantidade;   
+            return (true,"Produto adicionado com sucesso.");
+        }
+
+        public (bool,string) ReporEstoque(int quantidade)
+        {
+            if(quantidade < 0) return (false,"Quantidade inválida. É necessário inserir pelo menos 1 unidade ao produto.");
+            this.QuantidadeEstoque += quantidade;
+            return (true,"Estoque atualizado com sucesso!");
+        }
     }
 }

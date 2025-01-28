@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Market.Context;
+using Market.Models.DTO.Erros;
 using Market.Models.DTO.Produto;
 using Market.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,14 @@ namespace Market.Controllers
         [Route("{id}")]
         public ActionResult Editar(int id, ProdutoEdicaoDTO edicaoDTO){
             var produto = _service.Editar(id,edicaoDTO);
+            return Ok(new ProdutoExibicaoDTO(produto));
+        }
+
+        [HttpPut]
+        [Route("{id}/repor-quantidade/{quantidade}")]
+        public ActionResult Editar(int id, int quantidade){
+            var (mensagem,sucesso,produto) = _service.ReporQuantidade(id,quantidade);
+            if(!sucesso) return BadRequest(new ErroDTO(mensagem));
             return Ok(new ProdutoExibicaoDTO(produto));
         }
 

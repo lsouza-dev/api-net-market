@@ -38,11 +38,22 @@ namespace Market.Services
         public Produto Editar(int id,ProdutoEdicaoDTO edicaoDTO)
         {
             var produtoDb = BuscarPorId(id);
+            if(produtoDb == null) return null;
             produtoDb.Editar(edicaoDTO);
             _context.Produtos.Update(produtoDb);
             _context.SaveChanges();
 
             return produtoDb;
+        }
+
+        public (string,bool,Produto) ReporQuantidade(int id, int quantidade){
+            var produtoDb = BuscarPorId(id);
+            if(produtoDb == null) return ("Produto não econtrado.",false,null);
+            var (estoqueAtualizado,mensagem) = produtoDb.ReporEstoque(quantidade);
+            if(!estoqueAtualizado) return (mensagem,false,null);
+            _context.Produtos.Update(produtoDb);
+            _context.SaveChanges();
+            return (mensagem,true,produtoDb);
         }
 
         public bool Excluir(int id)

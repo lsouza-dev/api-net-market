@@ -18,7 +18,7 @@ namespace Market.Models
         public DateTime DataInicio { get; set; }
         public DateTime? DataFim { get; set; }
         public StatusCompra Status {get; set;}
-        public ICollection<CompraProduto> ComprasProdutos {get; set;}
+        public ICollection<CompraProduto> ComprasProdutos {get; set;} = new List<CompraProduto>();
 
         public Compra(){}
 
@@ -29,6 +29,7 @@ namespace Market.Models
             this.DataInicio = DateTime.Now;
             this.DataFim = null;
             this.Status = StatusCompra.PENDENTE;
+            this.ComprasProdutos = null;
         }
 
         public bool Finalizar(decimal valor){

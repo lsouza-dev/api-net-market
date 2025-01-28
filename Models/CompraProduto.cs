@@ -19,5 +19,23 @@ namespace Market.Models
 
         [Required]
         public int Quantidade { get; set; }
+
+
+        public CompraProduto(){}
+
+        public CompraProduto(Compra compra, Produto produto, int quantidade)
+        {
+            this.CompraId = compra.Id;
+            this.Compra = compra;
+            this.ProdutoId = produto.Id;
+            this.Produto = produto;
+            this.Quantidade = quantidade;
+        }
+
+        public override string ToString()
+        {
+            return $"ID: {this.Id} \tCompra ID: {this.CompraId} \tProduto ID: {this.ProdutoId} \tQuantidade: {this.Quantidade}\n";
+        
+        }
     }
 }
