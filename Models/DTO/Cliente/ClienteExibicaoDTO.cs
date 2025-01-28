@@ -9,6 +9,7 @@ namespace Market.Models.DTO.Cliente
     {
         public ClienteExibicaoDTO(Models.Cliente cliente)
         {
+            this.Id = cliente.Id;
             this.Nome = cliente.Nome; 
             this.Cpf = cliente.Cpf; 
             this.Email = cliente.Email; 
@@ -16,6 +17,7 @@ namespace Market.Models.DTO.Cliente
             this.Saldo = cliente.Saldo;
         }
 
+        public int Id { get; set; }
         public string Nome { get; set; } 
         public string Cpf { get; set; } 
         public string Email { get; set; } 

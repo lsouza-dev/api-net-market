@@ -7,7 +7,7 @@ namespace Market.Models.DTO.Produto
 {
     public record ProdutoExibicaoDTO
     {
-
+        public int Id { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public string Codigo { get; set; }
@@ -17,6 +17,7 @@ namespace Market.Models.DTO.Produto
 
         public ProdutoExibicaoDTO(Models.Produto p)
         {
+            this.Id = p.Id;
             this.Nome = p.Nome;
             this.Descricao = p.Descricao;
             this.Codigo = p.Codigo;

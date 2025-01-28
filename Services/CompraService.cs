@@ -66,52 +66,54 @@ namespace Market.Services
 
         public (bool, string, Compra) AdicionarCompraProduto(int compraId, int produtoId, int quantidade)
         {
-            var compra = BuscarPorId(compraId);
+            // Busca a compra incluindo as associações necessárias
+            var compra = _context.Compras
+                .Where(c => c.Id == compraId)
+                .Include(c => c.Cliente)
+                .Include(c => c.ComprasProdutos)
+                .ThenInclude(cp => cp.Produto)
+                .FirstOrDefault();
+
             if (compra == null || compra.Status == StatusCompra.PAGO)
                 return (false, $"Compra com o Id {compraId} não foi encontrada ou já está paga.", null);
 
+            // Busca o produto
             var produto = _produtoService.BuscarPorId(produtoId);
             if (produto == null)
                 return (false, $"Produto com o Id {produtoId} não foi encontrado.", null);
 
+            // Verifica se o produto pode ser vendido
             var (produtoAdicionado, mensagemVenda) = produto.Vender(quantidade);
             if (!produtoAdicionado)
                 return (false, mensagemVenda, null);
 
             // Cria uma nova entrada na tabela CompraProduto
             var compraProduto = new CompraProduto(compra, produto, quantidade);
-            _context.CompraProdutos.Add(compraProduto);
-            produto.ComprasProdutos.Add(compraProduto);
-            compra.ComprasProdutos.Add(compraProduto);
+            _context.CompraProdutos.Add(compraProduto); // Marca o novo objeto para ser adicionado
+            //compra.ComprasProdutos.Add(compraProduto); // Atualiza a lista associada na memória
+
+            // Salva as alterações no banco
             _context.Compras.Update(compra);
-            _context.Produtos.Update(produto);
             _context.SaveChanges();
-            // Agora que a Compra e seus Produtos estão salvos, calcula o valor total
+
+            // Recalcula o valor total da compra
             compra.ValorTotal = CalcularValorTotalCompra(compra);
 
-            // Atualiza o valor total e salva novamente, se necessário
+            // Salva novamente a compra para garantir consistência
             _context.Compras.Update(compra);
             _context.SaveChanges();
 
             return (true, $"Produto adicionado com sucesso à compra com Id {compra.Id} iniciada por {compra.Cliente.Nome}", compra);
         }
 
-
-
         private decimal CalcularValorTotalCompra(Compra compra)
         {
             var valorTotal = 0m;
 
-            // Garanta que os produtos relacionados estão carregados
+            // Itera sobre os itens associados à compra
             foreach (var compraProduto in compra.ComprasProdutos)
             {
-                if (compraProduto.Produto == null)
-                {
-                    // Carrega o Produto associado se ele estiver nulo
-                    compraProduto.Produto = _context.Produtos.FirstOrDefault(p => p.Id == compraProduto.ProdutoId);
-                }
-
-                if (compraProduto.Produto != null)
+                if (compraProduto.Produto != null) // Verifica se o Produto está carregado
                 {
                     valorTotal += compraProduto.Produto.Preco * compraProduto.Quantidade;
                 }
@@ -119,7 +121,6 @@ namespace Market.Services
 
             return valorTotal;
         }
-
 
 
 
